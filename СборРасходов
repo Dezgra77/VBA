@@ -1,0 +1,55 @@
+Option Explicit
+Sub СборРасходов()
+'Собирает расходы из файлов кассы
+On Error Resume Next: Err.Clear 'обработчик ошибок
+Dim i%
+Dim fpath$ 'путь к папке "Сбор"
+Dim twb As Excel.Workbook 'эта книга
+Dim shax As Excel.Worksheet 'вспомогательный лист для этого макроса
+Dim shb As Excel.Worksheet 'лист, куда собираем данные
+'Dim rngm As Excel.Range 'рабочий диапазон
+Dim cwbn$ 'имя обрабатываемого файла
+Dim ttc$ 'код ТТ
+Dim cwb As Excel.Workbook 'обрабатываемый файл
+Dim сsh As Excel.Worksheet 'обрабатываемый лист
+
+
+Application.ScreenUpdating = False 'отключить обновление экрана
+Application.DisplayAlerts = False 'отключить показ оповещений
+Application.Calculation = xlCalculationManual 'отключить пересчёт
+
+Set twb = ThisWorkbook 'эта книга
+Set shax = twb.Sheets("–") 'вспомогательный лист для этого макроса
+Set shb = twb.Sheets("Свод Расходы") 'лист, куда собираем данные
+fpath = twb.path
+
+For i = 5 To 6 '5 – номер строки первой ТТ в списке
+    If shax.Cells(i, 5) = 1 Then '5 – номер столбца "Обрабатывать"
+        cwbn = shax.Cells(i, 4).Value '4 – номер столбца "Имя файла кассы"
+        ttc = shax.Cells(i, 3).Value '3 – номер столбца "Код ТТ"
+        
+        Application.Workbooks.Open _
+            Filename:=fpath & "\" & cwbn, _
+            UpdateLinks:=0, _
+            ReadOnly:=True, _
+            AddToMru:=False 'открыть нужный файл кассы
+        
+        Set cwb = Workbooks(cwbn) 'файл кассы
+        Set сsh = cwb.Sheets("Расход") 'лист "Расход"
+        
+        
+        
+        
+
+    End If
+Next i
+
+
+
+
+
+
+Application.ScreenUpdating = True 'включить обновление экрана
+Application.DisplayAlerts = True 'включить показ оповещений
+Application.Calculation = xlCalculationAutomatic 'включить пересчёт
+End Sub
